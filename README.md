@@ -29,3 +29,19 @@ Sub-technologies that I will be using:
 
 I don't particularly like NodeJS (controversial I know ;) - I just don't want 100s of MBs of Node packages on my Pi) so the VueJS is done by referencing the VueJS CDNs directly from the html pages.
 This repo is mainly about learning about Python / Raspberry Pis and Pi cameras though - so that's the way I'm going - even if technically I know that is not the correct way to do it :).
+
+## Useful Links
+
+https://code.visualstudio.com/docs/python/python-tutorial
+
+https://picamera.readthedocs.io/en/release-1.12/index.html
+
+https://blog.miguelgrinberg.com/post/flask-video-streaming-revisited
+
+https://flask-restplus.readthedocs.io/en/stable/scaling.html
+
+I think these will also be useful:
+
+https://michal.karzynski.pl/blog/2016/06/19/building-beautiful-restful-apis-using-flask-swagger-ui-flask-restplus/
+
+https://git-scm.com/book/en/v2/Appendix-A%3A-Git-in-Other-Environments-Git-in-Bash
