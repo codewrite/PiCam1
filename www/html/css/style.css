@@ -1,0 +1,15 @@
+﻿body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+h1 {
+	font-family: Impact, Charcoal, sans-serif;
+	font-weight: Bold;
+	font-size: 44px;
+	color: Blue;
+}
+
+.versionDiv {
+    text-align: center
+}
