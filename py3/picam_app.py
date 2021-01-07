@@ -6,15 +6,19 @@ import time
 
 app = Flask(__name__)
 api = Api(app)
-_pi4cam = None
+# _pi4cam = None
 
 def gen(camera):
     # TODO: work out how we are going to save the camera object
-    _pi4cam = camera
     while True:
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+@api.route('/video_feed/')
+class VideoHelper(Resource):
+    def get(self):
+        return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @api.route('/hello')
 class HelloWorld(Resource):
@@ -24,18 +28,17 @@ class HelloWorld(Resource):
 @api.route('/annotateText')
 class CameraControl(Resource):
     def get(self):
-        if _pi4cam is None:
-          return { 'text': '' }
-        else:
-          return { 'text': _pi4cam.annotateText }
-
-@api.route('/video_feed/')
-class VideoHelper(Resource):
-    def get(self):
-        return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')
+      return { 'text': Camera().annotateText }
 
 if __name__ == '__main__':
     # certs copied from /etc/ssl/mycerts
-    print('running...')
-    # app.run(host='0.0.0.0', debug=True, ssl_context=('certs/nginx.pem', 'certs/nginx.key'))
-    app.run(host='0.0.0.0', debug=True)
+    try:
+      print('running...')
+      # _pi4cam = Camera()
+      # app.run(host='0.0.0.0', debug=True, ssl_context=('certs/nginx.pem', 'certs/nginx.key'))
+      app.run(host='0.0.0.0', debug=False)
+      print('stopping...')
+    finally:
+      pass
+      # if _pi4cam is not None:
+        # del _pi4cam

@@ -1,21 +1,34 @@
+import Singleton
 import io
 import time
 import picamera
 from base_camera import BaseCamera
 
+# There is only one camera, so this class is a singleton
+@Singleton
 class Camera(BaseCamera):
+  _instance = None
+  _camera = None
 
-  # _camera = ''
+  def __init__(cls):
+    if cls._instance is None:
+      print('Creating the camera object')
+      cls._instance = super(Camera, cls).__new__(cls)
+      cls._camera = picamera.PiCamera(resolution='640x480', framerate=5)
+    return cls._instance
 
-  @staticmethod
-  def frames():
-    with picamera.PiCamera(resolution='640x480', framerate=5) as camera:
-      # _camera = camera
-      camera.rotation = 180
-      camera.annotate_text = 'annotate text'
+  def __del__(self):
+    print('Destroying the camera object')
+    self._instance = None
+    self._camera.close()  
+
+  def frames(self):
+    try:
+      self._camera.rotation = 180
+      self._camera.annotate_text = 'annotate text'
       time.sleep(2)
       stream = io.BytesIO()
-      for _ in camera.capture_continuous(stream, 'jpeg', use_video_port=True):
+      for _ in self._camera.capture_continuous(stream, 'jpeg', use_video_port=True):
         # return current frame
         stream.seek(0)
         yield stream.read()
@@ -23,9 +36,11 @@ class Camera(BaseCamera):
         # reset stream for next frame
         stream.seek(0)
         stream.truncate()
+    finally:
+      pass
 
-  @staticmethod
-  def annotateText():
+  @classmethod
+  def annotateText(cls):
     return '' # _camera.annotate_text
 
     # def __init__(self):
