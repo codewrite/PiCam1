@@ -6,11 +6,11 @@ import time
 
 app = Flask(__name__)
 api = Api(app)
-_pi4cam = None
+# _pi4cam = None
 
 def gen(camera):
     # TODO: work out how we are going to save the camera object
-    _pi4cam = camera
+    # _pi4cam = camera
     while True:
         frame = camera.get_frame()
         yield (b'--frame\r\n'
@@ -24,10 +24,9 @@ class HelloWorld(Resource):
 @api.route('/annotateText')
 class CameraControl(Resource):
     def get(self):
-        if _pi4cam is None:
-          return { 'text': '' }
-        else:
-          return { 'text': _pi4cam.annotateText }
+      camera = Camera()
+      text = camera.annotateText()
+      return { 'text': '' }
 
 @api.route('/video_feed/')
 class VideoHelper(Resource):

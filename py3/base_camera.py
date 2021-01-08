@@ -1,3 +1,9 @@
+# ************************************************************************************
+#
+# This came from: https://blog.miguelgrinberg.com/post/flask-video-streaming-revisited
+#
+# ************************************************************************************
+
 import time
 import threading
 try:

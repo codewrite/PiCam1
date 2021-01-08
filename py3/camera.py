@@ -5,7 +5,7 @@ from base_camera import BaseCamera
 
 class Camera(BaseCamera):
 
-  # _camera = ''
+  # camera = None
 
   @staticmethod
   def frames():
