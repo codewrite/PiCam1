@@ -10,13 +10,13 @@ class Camera(BaseCamera):
   def __init__(self):
     if Camera._camera is None:
       Camera._camera = picamera.PiCamera(resolution='640x480', framerate=5)
+      Camera._camera.annotate_text = 'annotate text'
+      Camera._camera.rotation = 180
     super().__init__()
 
   @classmethod
   def frames(cls):
     try:
-      cls._camera.rotation = 180
-      cls._camera.annotate_text = 'annotate text'
       time.sleep(2)
       stream = io.BytesIO()
       for _ in cls._camera.capture_continuous(stream, 'jpeg', use_video_port=True):
@@ -31,9 +31,13 @@ class Camera(BaseCamera):
       # TODO: Handle errors
       pass
 
-  @classmethod
-  def annotateText(cls):
-    return '' # _camera.annotate_text
+  @property
+  def annotateText(self):
+    return Camera._camera.annotate_text
+
+  @annotateText.setter
+  def annotateText(self, value):
+    Camera._camera.annotate_text = value
 
     # def __init__(self):
     #     self.frames = [open(f + '.jpg', 'rb').read() for f in ['1', '2', '3']]
