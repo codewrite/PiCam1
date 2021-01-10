@@ -5,17 +5,21 @@ from base_camera import BaseCamera
 
 class Camera(BaseCamera):
 
-  # camera = None
+  _camera = None
 
-  @staticmethod
-  def frames():
-    with picamera.PiCamera(resolution='640x480', framerate=5) as camera:
-      # _camera = camera
-      camera.rotation = 180
-      camera.annotate_text = 'annotate text'
+  def __init__(self):
+    if Camera._camera is None:
+      Camera._camera = picamera.PiCamera(resolution='640x480', framerate=5)
+    super().__init__()
+
+  @classmethod
+  def frames(cls):
+    try:
+      cls._camera.rotation = 180
+      cls._camera.annotate_text = 'annotate text'
       time.sleep(2)
       stream = io.BytesIO()
-      for _ in camera.capture_continuous(stream, 'jpeg', use_video_port=True):
+      for _ in cls._camera.capture_continuous(stream, 'jpeg', use_video_port=True):
         # return current frame
         stream.seek(0)
         yield stream.read()
@@ -23,9 +27,12 @@ class Camera(BaseCamera):
         # reset stream for next frame
         stream.seek(0)
         stream.truncate()
+    finally:
+      # TODO: Handle errors
+      pass
 
-  @staticmethod
-  def annotateText():
+  @classmethod
+  def annotateText(cls):
     return '' # _camera.annotate_text
 
     # def __init__(self):
