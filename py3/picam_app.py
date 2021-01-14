@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-from flask import Flask, render_template, Response
-from flask_restplus import Api, Resource
+from flask import Flask, request, render_template, Response
+from flask_restplus import reqparse, fields, Api, Resource
 from camera import Camera
 import time
+import json
 
 app = Flask(__name__)
-api = Api(app)
+api = Api(app, version='0.1', title='PiCam1 API', description='Raspberry Pi Camera 4 API')
+
+ns_camera = api.namespace('camera', description='Camera operations')
 
 def gen(camera):
     while True:
@@ -18,16 +21,48 @@ class HelloWorld(Resource):
     def get(self):
         return {'hello': 'world'}
 
-@api.route('/annotateText')
+camera_fields = api.model('CameraProperties', {
+'anyAttribute1': fields.String,
+'anyAttribute2etc': fields.String,
+})
+
+@ns_camera.route('/annotateText')
 # @api.route('/annotateText/<string:text>')
 class AnnotateText(Resource):
   def get(self):
     text = Camera().annotateText
     return { 'text': text }
+  @api.doc(body=camera_fields)
   def put(self):
-    Camera().annotateText = 'abc'
+    parser = reqparse.RequestParser()
+    parser.add_argument("text", default="", type=str)
+    args = parser.parse_args()
+    Camera().annotateText = args["text"]
 
-@api.route('/video_feed/')
+@ns_camera.route('/properties')
+class CameraProperties(Resource):
+  def get(self):
+    cam = Camera().camera
+    allAttr = [a for a in dir(cam) if not a.startswith('_')]
+    propNames = []
+    for a in allAttr:
+      try:
+        if (not callable(getattr(cam, a))):
+          propNames.append(a)
+      except:
+        pass
+    props = {}
+    for n in propNames:
+      props[n] = eval("cam." + n)
+    cleanProps = json.loads(json.dumps(props, indent=4, sort_keys=True, default=str))
+    return cleanProps
+  @api.doc(body=camera_fields)
+  def put(self):
+    reqData = json.loads(request.data)
+    for a in reqData:
+      exec("Camera().camera." + a + "=reqData['" + a + "']")
+
+@ns_camera.route('/video_feed/')
 class VideoHelper(Resource):
     def get(self):
         return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')

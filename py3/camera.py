@@ -35,6 +35,10 @@ class Camera(BaseCamera):
   def annotateText(self):
     return Camera._camera.annotate_text
 
+  @property
+  def camera(self):
+    return Camera._camera
+
   @annotateText.setter
   def annotateText(self, value):
     Camera._camera.annotate_text = value
