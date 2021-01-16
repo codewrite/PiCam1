@@ -9,7 +9,7 @@ class Camera(BaseCamera):
 
   def __init__(self):
     if Camera._camera is None:
-      Camera._camera = picamera.PiCamera(resolution='640x480', framerate=5)
+      Camera._camera = picamera.PiCamera(resolution='1280x720', framerate=5)
       Camera._camera.annotate_text = 'annotate text'
       Camera._camera.rotation = 180
     super().__init__()
