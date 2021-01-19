@@ -28,7 +28,10 @@
     <div id="app">
       <div>
         <h1>Raspberry Pi 4 Camera</h1>
-        <img id="video-feed" />
+        <div style="position: relative; height: 480px;">
+          <img id="video-feed" style="position: absolute;" />
+          <zoom-control top="30" left="50" width="200" height="150"></zoom-control>
+        </div>
       </div>
       <div style="border:solid 2px blue; width: 480px; margin: 20px; padding: 10px;">
         <div class="row">
@@ -46,7 +49,7 @@
         </div>
       </div>
       <hr/>
-      <div class="row versionDiv">{{ pageVersion() }}: Last Update: {{ lastModified() }}</div>
+      <div class="versionDiv">{{ pageVersion() }}: Last Update: {{ lastModified() }}</div>
     </div>
     <script>
       function includeJS(uri) {
@@ -69,6 +72,7 @@
 			globalConstants.indexPageVersion = indexPageVersion;
 			globalConstants.lastModifiedTimestamp = lastModifiedTimestamp;
         });
+      includeJS("components/zoomControl.js?v=" + lastModifiedTimestamp);
       includeJS("index.js?v=" + lastModifiedTimestamp);
       $.ajaxSetup({cache: false});
     </script>
