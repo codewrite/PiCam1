@@ -19,9 +19,8 @@ Vue.component('zoom-control', {
     },
     template: /*html*/`
     <div :style="{top:top + 'px',left:left + 'px', width:width + 'px', height:height + 'px', position:'absolute', cursor:'move', opacity:'80%'}"
-         draggable="true" v-on:dragstart="dragBox(event)" v-on:dragstart="dragBox(event)">
-        <div v-for="n in 4" :style="{top:circlePos(n).y + 'px', left:circlePos(n).x + 'px', position:'absolute', cursor:circlePos(n).cursor}"
-             draggable="true" v-on:dragstart="dragCircle(event)">
+         >
+        <div v-for="n in 4" :style="{top:circlePos(n).y + 'px', left:circlePos(n).x + 'px', position:'absolute', cursor:circlePos(n).cursor}">
           <svg :width="circleSize*2+lineWidth" :height="circleSize*2+lineWidth" style="display:block">
             <circle :cx="circleSize+lineWidth/2" :cy="circleSize+lineWidth/2" :r="circleSize" stroke="green" :stroke-width="lineWidth" fill="yellow" />
           </svg>
@@ -37,19 +36,16 @@ Vue.component('zoom-control', {
         created: function() {
         },
         // Using "draggable" probably isn't the best solution, but it is quite fast and relatively lightweight
-        dragCircle: function(ev) {
+        mouseDown: function(ev) {
           if (ev != undefined)
             ev.dataTransfer.setData("text", ev.target.id);
         },
-        dropCircle: function(ev) {
+        mouseUp: function(ev) {
 
         },
-        dragBox: function(ev) {
+        mouseMove: function(ev) {
             if (ev != undefined)
               ev.dataTransfer.setData("text", ev.target.id);
-        },
-        dropBox(ev) {
-
         },
         circlePos: function(n) {
           var top = {};
