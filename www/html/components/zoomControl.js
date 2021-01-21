@@ -8,7 +8,9 @@ Vue.component('zoom-control', {
         top: { type: Number },
         left: { type: Number },
         width: { type: Number },
-        height: { type: Number } 
+        height: { type: Number },
+        offsetX: { type: Number },
+        offsetY: { type: Number }
     },
     data: function() {
         return {
@@ -19,7 +21,7 @@ Vue.component('zoom-control', {
     },
     template: /*html*/`
     <div :style="{top:top + 'px',left:left + 'px', width:width + 'px', height:height + 'px', position:'absolute', cursor:'move', opacity:'80%'}"
-         >
+         @mousedown="mouseDown">
         <div v-for="n in 4" :style="{top:circlePos(n).y + 'px', left:circlePos(n).x + 'px', position:'absolute', cursor:circlePos(n).cursor}">
           <svg :width="circleSize*2+lineWidth" :height="circleSize*2+lineWidth" style="display:block">
             <circle :cx="circleSize+lineWidth/2" :cy="circleSize+lineWidth/2" :r="circleSize" stroke="green" :stroke-width="lineWidth" fill="yellow" />
@@ -35,10 +37,10 @@ Vue.component('zoom-control', {
     methods: {
         created: function() {
         },
-        // Using "draggable" probably isn't the best solution, but it is quite fast and relatively lightweight
         mouseDown: function(ev) {
-          if (ev != undefined)
-            ev.dataTransfer.setData("text", ev.target.id);
+          this.offsetX = ev.offsetX;
+          this.offsetY = ev.offsetY;
+          this.$emit('zoom-mouse-down', {x: this.offsetX, y: this.offsetY});
         },
         mouseUp: function(ev) {
 
