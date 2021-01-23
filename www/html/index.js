@@ -5,15 +5,16 @@
 var app = new Vue({
     el: '#app',
     props: {
+      showZoomControl : { type: Boolean, default: false },
       mouseX: Number,
       mouseY: Number
     },
     data: {
-        //videoFeedUrl: '/images/BackGarden.jpg',
         //videoFeedUrl: "http://" + window.location.hostname + ":5000/media/video_feed/",
-        videoFeedUrl: "http://rpi4:5000/media/video_feed/",
-        videoWidth: { type: Number },
-        videoHeight: { type: Number },
+        //videoFeedUrl: "http://rpi4:5000/media/video_feed/",
+        videoFeedUrl: '/images/BackGarden.jpg',
+        videoWidth: { type: Number, default: 100 },
+        videoHeight: { type: Number, default: 100 },
         yourName: ''
     },
     methods: {
