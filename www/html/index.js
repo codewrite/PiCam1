@@ -5,7 +5,6 @@
 var app = new Vue({
     el: '#app',
     props: {
-      showZoomControl : { type: Boolean, default: false },
       mouseX: Number,
       mouseY: Number
     },
@@ -13,10 +12,21 @@ var app = new Vue({
         //videoFeedUrl: "http://" + window.location.hostname + ":5000/media/video_feed/",
         //videoFeedUrl: "http://rpi4:5000/media/video_feed/",
         videoFeedUrl: '/images/BackGarden.jpg',
-        videoWidth: { type: Number, default: 100 },
-        videoHeight: { type: Number, default: 100 },
+        showZoomControl: false,
+        videoWidth: 320,
+        videoHeight: 160,
         yourName: ''
     },
+    mounted() {
+      if (localStorage.showZoomControl) {
+        this.showZoomControl = (localStorage.showZoomControl == String(true));
+      }
+    },
+    watch: {
+      showZoomControl(newValue) {
+        localStorage.showZoomControl = newValue;
+      }
+    },  
     methods: {
       pageVersion: function() {
         if (globalConstants === undefined) { return "" }
