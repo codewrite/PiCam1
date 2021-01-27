@@ -74,38 +74,38 @@ Vue.component('zoom-control', {
         return { x: x, y: y };
       },
       zoomChanged: function(x, y) {
-        var newPos = {};
+        var newPos = { x: this.startXY.x - this.startCursorOffset.x,
+                       y: this.startXY.y - this.startCursorOffset.y,
+                       width: this.width,
+                       height: this.height
+                     };
         switch (this.currentCursor) {
           case ZoomCursorEnum.Move:
-            this.$emit('zoom-move', { x: x, y: y, width: this.width, height: this.height });
+            newPos.x = Math.max(0, x);
+            newPos.y = Math.max(0, y);
             break;
           case ZoomCursorEnum.North:
-            var newHeight = this.startXY.height - y + this.startXY.y - this.startCursorOffset.y;
-            var newWidth = this.framewidth * newHeight / this.frameheight;
-            this.$emit('zoom-move', { x: this.startXY.x - this.startCursorOffset.x, y: y,
-                        width: newWidth, height: newHeight });
+            newPos.y = Math.max(0, y);
+            newPos.height = this.startXY.height - y + this.startXY.y - this.startCursorOffset.y;
+            newPos.width = this.framewidth * newPos.height / this.frameheight;
             break;
           case ZoomCursorEnum.East:
-            var newWidth = this.startXY.width + x - this.startXY.x + this.startCursorOffset.x;
-            var newHeight = this.frameheight * newWidth / this.framewidth;
-            this.$emit('zoom-move', { x: this.startXY.x - this.startCursorOffset.x, y: this.startXY.y - this.startCursorOffset.y,
-              width: newWidth, height: newHeight });
+            newPos.width = this.startXY.width + x - this.startXY.x + this.startCursorOffset.x;
+            newPos.height = this.frameheight * newPos.width / this.framewidth;
             break;
           case ZoomCursorEnum.South:
-            var newHeight = this.startXY.height + y - this.startXY.y + this.startCursorOffset.y;
-            var newWidth = this.framewidth * newHeight / this.frameheight;
-            this.$emit('zoom-move', { x: this.startXY.x - this.startCursorOffset.x, y: this.startXY.y - this.startCursorOffset.y,
-              width: newWidth, height: newHeight });
+            newPos.height = this.startXY.height + y - this.startXY.y + this.startCursorOffset.y;
+            newPos.width = this.framewidth * newPos.height / this.frameheight;
             break;
           case ZoomCursorEnum.West:
-            var newWidth = this.startXY.width - x + this.startXY.x - this.startCursorOffset.x;
-            var newHeight = this.frameheight * newWidth / this.framewidth;
-            this.$emit('zoom-move', { x: x, y: this.startXY.y - this.startCursorOffset.y,
-              width: newWidth, height: newHeight });
+            newPos.x = Math.max(0, x);
+            newPos.width = this.startXY.width - x + this.startXY.x - this.startCursorOffset.x;
+            newPos.height = this.frameheight * newPos.width / this.framewidth;
             break;
           default:
             break;
         }
+        this.$emit('zoom-move', { x: newPos.x, y: newPos.y, width: newPos.width, height: newPos.height });
       },
       created: function() {
       },
