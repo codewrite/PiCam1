@@ -20,7 +20,7 @@ Vue.component('zoom-control', {
     data: function() {
         return {
           zoomBorderSize: 10,
-          lineWidth: 3,
+          lineWidth: 4,
           currentCursor: ZoomCursorEnum.Default,
           currentDrag: ZoomCursorEnum.Default,
           startXY: undefined,
@@ -74,18 +74,34 @@ Vue.component('zoom-control', {
         return { x: x, y: y };
       },
       zoomChanged: function(x, y) {
+        var newPos = {};
         switch (this.currentCursor) {
           case ZoomCursorEnum.Move:
             this.$emit('zoom-move', { x: x, y: y, width: this.width, height: this.height });
             break;
           case ZoomCursorEnum.North:
-            this.$emit('zoom-move', { x: x, y: y, width: 100, height: 50 });
+            var newHeight = this.startXY.height - y + this.startXY.y - this.startCursorOffset.y;
+            var newWidth = this.framewidth * newHeight / this.frameheight;
+            this.$emit('zoom-move', { x: this.startXY.x - this.startCursorOffset.x, y: y,
+                        width: newWidth, height: newHeight });
             break;
           case ZoomCursorEnum.East:
+            var newWidth = this.startXY.width + x - this.startXY.x + this.startCursorOffset.x;
+            var newHeight = this.frameheight * newWidth / this.framewidth;
+            this.$emit('zoom-move', { x: this.startXY.x - this.startCursorOffset.x, y: this.startXY.y - this.startCursorOffset.y,
+              width: newWidth, height: newHeight });
             break;
           case ZoomCursorEnum.South:
+            var newHeight = this.startXY.height + y - this.startXY.y + this.startCursorOffset.y;
+            var newWidth = this.framewidth * newHeight / this.frameheight;
+            this.$emit('zoom-move', { x: this.startXY.x - this.startCursorOffset.x, y: this.startXY.y - this.startCursorOffset.y,
+              width: newWidth, height: newHeight });
             break;
           case ZoomCursorEnum.West:
+            var newWidth = this.startXY.width - x + this.startXY.x - this.startCursorOffset.x;
+            var newHeight = this.frameheight * newWidth / this.framewidth;
+            this.$emit('zoom-move', { x: x, y: this.startXY.y - this.startCursorOffset.y,
+              width: newWidth, height: newHeight });
             break;
           default:
             break;
@@ -95,7 +111,7 @@ Vue.component('zoom-control', {
       },
       mouseDown: function(ev) {
         if (!this.dragInProgress && ev.button == 0) {
-          this.startXY = { x: ev.offsetX, y: ev.offsetY };
+          this.startXY = { x: ev.offsetX, y: ev.offsetY, width: this.width, height: this.height };
           this.startCursorOffset = { x: ev.offsetX - this.left, y: ev.offsetY - this.top };
           this.$emit('zoom-mouse-down', this.startXY);
           this.currentDrag = this.currentCursor;
@@ -119,7 +135,7 @@ Vue.component('zoom-control', {
         if (!this.dragInProgress && ev.touches.length == 1) {
           var pos = this.getMouseCoOrdsFromTouchCoOrds(ev.touches[0].clientX, ev.touches[0].clientY);
           if (pos.x >= this.left && pos.x < this.left + this.width && pos.y >= this.top && pos.y < this.top + this.height) {
-            this.startXY = { x: pos.x, y: pos.y };
+            this.startXY = { x: pos.x, y: pos.y, width: this.width, height: this.height };
             this.startCursorOffset = { x: pos.x - this.left, y: pos.y - this.top };
             this.$emit('zoom-mouse-down', this.startXY);
             this.currentCursor = this.getCursor(pos.x, pos.y);
