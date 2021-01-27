@@ -15,6 +15,10 @@ var app = new Vue({
         showZoomControl: false,
         videoWidth: 320,
         videoHeight: 160,
+        zoomTop: 40,
+        zoomLeft: 50,
+        zoomWidth: 200,
+        zoomHeight: 150,
         yourName: ''
     },
     mounted() {
@@ -43,6 +47,12 @@ var app = new Vue({
       zoomControlMouseDown: function(data) {
         this.mouseX = data.x;
         this.mouseY = data.y;
+      },
+      zoomControlMove: function(data) {
+        this.zoomLeft = data.x;
+        this.zoomTop = data.y;
+        this.zoomWidth = data.width;
+        this.zoomHeight = data.height;
       }
     },
     computed: {
