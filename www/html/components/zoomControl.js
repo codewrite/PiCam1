@@ -87,20 +87,20 @@ Vue.component('zoom-control', {
           case ZoomCursorEnum.North:
             newPos.y = Math.max(0, y);
             newPos.height = this.startXY.height - y + this.startXY.y - this.startCursorOffset.y;
-            newPos.width = this.framewidth * newPos.height / this.frameheight;
+            newPos.width = Math.round(this.framewidth * newPos.height / this.frameheight);
             break;
           case ZoomCursorEnum.East:
             newPos.width = this.startXY.width + x - this.startXY.x + this.startCursorOffset.x;
-            newPos.height = this.frameheight * newPos.width / this.framewidth;
+            newPos.height = Math.round(this.frameheight * newPos.width / this.framewidth);
             break;
           case ZoomCursorEnum.South:
             newPos.height = this.startXY.height + y - this.startXY.y + this.startCursorOffset.y;
-            newPos.width = this.framewidth * newPos.height / this.frameheight;
+            newPos.width = Math.round(this.framewidth * newPos.height / this.frameheight);
             break;
           case ZoomCursorEnum.West:
             newPos.x = Math.max(0, x);
             newPos.width = this.startXY.width - x + this.startXY.x - this.startCursorOffset.x;
-            newPos.height = this.frameheight * newPos.width / this.framewidth;
+            newPos.height = Math.round(this.frameheight * newPos.width / this.framewidth);
             break;
           default:
             break;

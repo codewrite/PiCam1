@@ -9,26 +9,32 @@ var app = new Vue({
       mouseY: Number
     },
     data: {
-        //videoFeedUrl: "http://" + window.location.hostname + ":5000/media/video_feed/",
+        videoFeedUrl: "http://" + window.location.hostname + ":5000/media/video_feed/",
         //videoFeedUrl: "http://rpi4:5000/media/video_feed/",
-        videoFeedUrl: '/images/BackGarden.jpg',
+        //videoFeedUrl: '/images/BackGarden.jpg',
         showZoomControl: false,
         videoWidth: 320,
         videoHeight: 160,
-        zoomTop: 40,
-        zoomLeft: 50,
-        zoomWidth: 200,
-        zoomHeight: 150,
+        zoomPos: { top: 40, left: 50, width: 200, height: 150 },
         yourName: ''
     },
     mounted() {
       if (localStorage.showZoomControl) {
         this.showZoomControl = (localStorage.showZoomControl == String(true));
       }
+      if (localStorage.zoomPos) {
+        this.zoomPos = JSON.parse(localStorage.zoomPos);
+      }
     },
     watch: {
       showZoomControl(newValue) {
-        localStorage.showZoomControl = newValue;
+          localStorage.showZoomControl = newValue;
+      },
+      zoomPos: {
+        handler(newValue) {
+          localStorage.zoomPos = JSON.stringify(newValue);
+        },
+        deep: true
       }
     },  
     methods: {
@@ -40,6 +46,15 @@ var app = new Vue({
       },
       created: function () {
       },
+      clearLocalStorage: function() {
+        localStorage.clear();
+      },
+      zoomIn: function() {
+
+      },
+      zoomOut: function() {
+
+      },
       onImgLoad: function(ev) {
         this.videoWidth = ev.currentTarget.width;
         this.videoHeight = ev.currentTarget.height;
@@ -49,13 +64,12 @@ var app = new Vue({
         this.mouseY = data.y;
       },
       zoomControlMove: function(data) {
-        this.zoomLeft = data.x;
-        this.zoomTop = data.y;
-        this.zoomWidth = data.width;
-        this.zoomHeight = data.height;
+        this.zoomPos.left = data.x;
+        this.zoomPos.top = data.y;
+        this.zoomPos.width = data.width;
+        this.zoomPos.height = data.height;
       }
     },
     computed: {
-
     }
 })

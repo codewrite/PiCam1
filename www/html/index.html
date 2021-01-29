@@ -18,32 +18,29 @@
       // Update this every time the website is modified
       var indexPageVersion = "v0.001";
     </script>
-    <div id="app" class="container-fluid">
-      <div>
+    <div id="app" class="container">
         <h1>Raspberry Pi 4 Camera</h1>
         <div id="img-container" :style="{width: videoWidth + 'px', height: videoHeight + 'px', position: 'relative'}">
           <img :src="videoFeedUrl" style="position: absolute;"  @load="onImgLoad"/>
           <zoom-control @zoom-mouse-down="zoomControlMouseDown" @zoom-move="zoomControlMove"
                         :framewidth="videoWidth" :frameheight="videoHeight" :control-visible="showZoomControl"
-                        :top="zoomTop" :left="zoomLeft" :width="zoomWidth" :height="zoomHeight"></zoom-control>
+                        :top="zoomPos.top" :left="zoomPos.left" :width="zoomPos.width" :height="zoomPos.height"></zoom-control>
         </div>
-      </div>
       <div :style="{width: videoWidth + 'px'}">
         <hr/>
         <div class="row">
-          <div class="col-sm-1">
-          </div>
           <div class="col-sm-3 custom-control custom-switch">
             <input type="checkbox" id="zoom-control-checkbox" v-model="showZoomControl" class="custom-control-input">
             <label class="custom-control-label" for="zoom-control-checkbox">Zoom Control</label>
           </div>
           <div class="col-sm-3">
-            <button type="button" :disabled="!showZoomControl" class="btn btn-primary">Zoom In</button>
+            <button type="button" :disabled="!showZoomControl" @click="zoomIn" class="btn btn-primary">Zoom In</button>
           </div>
           <div class="col-sm-3">
-            <button type="button" :disabled="!showZoomControl" class="btn btn-primary">Zoom Out</button>
+            <button type="button" :disabled="!showZoomControl" @click="zoomOut" class="btn btn-primary">Zoom Out</button>
           </div>
-          <div class="col-sm-2">
+          <div class="col-sm-3">
+            <button type="button" class="btn btn-danger" @click="clearLocalStorage">Clear Data</button>
           </div>
         </div>
         <hr/>
