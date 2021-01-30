@@ -22,7 +22,7 @@
         <h1>Raspberry Pi 4 Camera</h1>
         <div id="img-container" :style="{width: videoWidth + 'px', height: videoHeight + 'px', position: 'relative'}">
           <img :src="videoFeedUrl" style="position: absolute;"  @load="onImgLoad"/>
-          <zoom-control @zoom-mouse-down="zoomControlMouseDown" @zoom-move="zoomControlMove"
+          <zoom-control @zoom-mouse-pos-test="zoomControlMousePosTest" @zoom-move="zoomControlMove"
                         :framewidth="videoWidth" :frameheight="videoHeight" :control-visible="showZoomControl"
                         :top="zoomPos.top" :left="zoomPos.left" :width="zoomPos.width" :height="zoomPos.height"></zoom-control>
         </div>

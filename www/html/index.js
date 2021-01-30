@@ -12,11 +12,11 @@ var app = new Vue({
         videoFeedUrl: "http://" + window.location.hostname + ":5000/media/video_feed/",
         //videoFeedUrl: "http://rpi4:5000/media/video_feed/",
         //videoFeedUrl: '/images/BackGarden.jpg',
+        cameraPropertiesUrl: "http://" + window.location.hostname + ":5000/camera/properties",
         showZoomControl: false,
         videoWidth: 320,
         videoHeight: 160,
-        zoomPos: { top: 40, left: 50, width: 200, height: 150 },
-        yourName: ''
+        zoomPos: { top: 40, left: 50, width: 200, height: 150 }
     },
     mounted() {
       if (localStorage.showZoomControl) {
@@ -49,17 +49,33 @@ var app = new Vue({
       clearLocalStorage: function() {
         localStorage.clear();
       },
+      doZoom: function(zoomData) {
+        axios
+          .put(this.cameraPropertiesUrl, zoomData)
+          .then(response => {
+            
+          })
+          .catch(error => {
+            console.log(error)
+          })
+          .finally(() => { });
+      },
       zoomIn: function() {
-
+        var x = this.zoomPos.left / this.videoWidth;
+        var y = this.zoomPos.top / this.videoHeight;
+        var width = this.zoomPos.width / this.videoWidth;
+        var height = this.zoomPos.height / this.videoHeight;
+        var zoomData = { "zoom": [ x, y, width, height ] }
+        this.doZoom(zoomData);
       },
       zoomOut: function() {
-
+        this.doZoom({ "zoom": [ 0,0,1,1 ] });
       },
       onImgLoad: function(ev) {
         this.videoWidth = ev.currentTarget.width;
         this.videoHeight = ev.currentTarget.height;
       },
-      zoomControlMouseDown: function(data) {
+      zoomControlMousePosTest: function(data) {
         this.mouseX = data.x;
         this.mouseY = data.y;
       },

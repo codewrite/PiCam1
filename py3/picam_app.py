@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 from flask import Flask, request, render_template, Response
 from flask_restplus import reqparse, fields, Api, Resource
+from flask_cors import CORS
 from camera import Camera
 import time
 import json
 from utils import Utils
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app, version='0.1', title='PiCam1 API', description='Raspberry Pi Camera 4 API')
 
 ns_camera = api.namespace('camera', description='Camera operations')

@@ -37,13 +37,6 @@ Vue.component('zoom-control', {
     </div>
     `,
     methods: {
-      sleep: function(milliseconds) {     // For testing - TODO: remove when not needed
-        const date = Date.now();
-        let currentDate = null;
-        do {
-          currentDate = Date.now();
-        } while (currentDate - date < milliseconds);
-      },
       getCursor: function(x, y) {
         var cursor;
         if (x >= this.left + this.zoomBorderSize && x < this.left + this.width - this.zoomBorderSize &&
@@ -113,13 +106,13 @@ Vue.component('zoom-control', {
         if (!this.dragInProgress && ev.button == 0) {
           this.startXY = { x: ev.offsetX, y: ev.offsetY, width: this.width, height: this.height };
           this.startCursorOffset = { x: ev.offsetX - this.left, y: ev.offsetY - this.top };
-          this.$emit('zoom-mouse-down', this.startXY);
+          this.$emit('zoom-mouse-pos-test', this.startXY);
           this.currentDrag = this.currentCursor;
         }
       },
       mouseMove: function(ev) {
         if (this.dragInProgress) {
-          this.$emit('zoom-mouse-down', { x: ev.offsetX, y: ev.offsetY });
+          this.$emit('zoom-mouse-pos-test', { x: ev.offsetX, y: ev.offsetY });
           this.zoomChanged(ev.offsetX - this.startCursorOffset.x, ev.offsetY - this.startCursorOffset.y);
         }
         else {
@@ -137,7 +130,7 @@ Vue.component('zoom-control', {
           if (pos.x >= this.left && pos.x < this.left + this.width && pos.y >= this.top && pos.y < this.top + this.height) {
             this.startXY = { x: pos.x, y: pos.y, width: this.width, height: this.height };
             this.startCursorOffset = { x: pos.x - this.left, y: pos.y - this.top };
-            this.$emit('zoom-mouse-down', this.startXY);
+            this.$emit('zoom-mouse-pos-test', this.startXY);
             this.currentCursor = this.getCursor(pos.x, pos.y);
             this.currentDrag = this.currentCursor;
             ev.preventDefault();
@@ -147,7 +140,7 @@ Vue.component('zoom-control', {
       touchMove: function(ev) {
         if (this.dragInProgress && ev.touches.length == 1) {
           var pos = this.getMouseCoOrdsFromTouchCoOrds(ev.touches[0].clientX, ev.touches[0].clientY);
-          this.$emit('zoom-mouse-down', { x: pos.x, y: pos.y });
+          this.$emit('zoom-mouse-pos-test', { x: pos.x, y: pos.y });
           this.zoomChanged(pos.x - this.startCursorOffset.x, pos.y - this.startCursorOffset.y);
           ev.preventDefault();
         }
