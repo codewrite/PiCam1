@@ -62,6 +62,11 @@ class BaseCamera(object):
     frame = None  # current frame is stored here by background thread
     last_access = 0  # time of last client access to the camera
     event = CameraEvent()
+    motion_thread = None  # background thread that reads frames from camera
+    motion_frame = None  # current frame is stored here by background thread
+    motion_last_access = 0  # time of last client access to the camera
+    motion_event = CameraEvent()
+
 
     def __init__(self):
         """Start the background camera thread if it isn't running yet."""
@@ -76,6 +81,17 @@ class BaseCamera(object):
             while BaseCamera.get_frame() is None:
                 time.sleep(0)
 
+        if BaseCamera.motion_thread is None:
+            BaseCamera.motion_last_access = time.time()
+
+            # start background frame thread
+            #BaseCamera.motion_thread = threading.Thread(target=self._motion_thread)
+            #BaseCamera.motion_thread.start()
+
+            # wait until frames are available
+            #while BaseCamera.get_motion_frame() is None:
+            #    time.sleep(0)
+
     @classmethod
     def get_frame(cls):
         """Return the current camera frame."""
@@ -88,8 +104,24 @@ class BaseCamera(object):
         return BaseCamera.frame
 
     @classmethod
+    def get_motion_frame(cls):
+        """Return the current camera motion frame."""
+        BaseCamera.last_access = time.time()
+
+        # wait for a signal from the camera thread
+        BaseCamera.motion_event.wait()
+        BaseCamera.motion_event.clear()
+
+        return BaseCamera.motion_frame
+
+    @classmethod
     def frames(cls):
         """"Generator that returns frames from the camera."""
+        raise RuntimeError('Must be implemented by subclasses.')
+
+    @classmethod
+    def motion_frames(cls):
+        """"Generator that returns motion frames from the camera."""
         raise RuntimeError('Must be implemented by subclasses.')
 
     @classmethod
@@ -110,3 +142,22 @@ class BaseCamera(object):
                 print('Stopping camera thread due to inactivity.')
                 break
         BaseCamera.thread = None
+
+    @classmethod
+    def _motion_thread(cls):
+        """Camera Motion background thread."""
+        print('Starting camera motion thread.')
+        frames_iterator = cls.motion_frames()
+        for frame in frames_iterator:
+            BaseCamera.motion_frame = frame
+            # print('.', end='.')
+            BaseCamera.motion_event.set()  # send signal to clients
+            time.sleep(0)
+
+            # if there hasn't been any clients asking for frames in
+            # the last 10 seconds then stop the thread
+            if time.time() - BaseCamera.motion_last_access > 10:
+                frames_iterator.close()
+                print('Stopping camera motion thread due to inactivity.')
+                break
+        BaseCamera.motion_thread = None

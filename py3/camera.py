@@ -1,6 +1,9 @@
 import io
 import time
+import numpy as np
 import picamera
+import picamera.array
+from PIL import Image
 from base_camera import BaseCamera
 
 class Camera(BaseCamera):
@@ -27,6 +30,39 @@ class Camera(BaseCamera):
         # reset stream for next frame
         stream.seek(0)
         stream.truncate()
+    finally:
+      # TODO: Handle errors
+      pass
+
+
+# with picamera.PiCamera() as camera:
+#     with picamera.array.PiMotionArray(camera) as stream:
+#         camera.resolution = (640, 480)
+#         camera.framerate = 30
+#         camera.start_recording('/dev/null', format='h264', motion_output=stream)
+#         camera.wait_recording(10)
+#         camera.stop_recording()
+#         for frame in range(stream.array.shape[0]):
+#             data = np.sqrt(
+#                 np.square(stream.array[frame]['x'].astype(np.float)) +
+#                 np.square(stream.array[frame]['y'].astype(np.float))
+#                 ).clip(0, 255).astype(np.uint8)
+#             img = Image.fromarray(data)
+    
+  @classmethod
+  def motion_frames(cls):
+    try:
+      time.sleep(2)
+      with picamera.array.PiMotionArray(cls._camera) as stream:
+        cls._camera.start_recording('/dev/null', format='h264', motion_output=stream)
+        # return current frame
+        for frame in range(stream.array.shape[0]):
+            data = np.sqrt(
+                np.square(stream.array[frame]['x'].astype(np.float)) +
+                np.square(stream.array[frame]['y'].astype(np.float))
+                ).clip(0, 255).astype(np.uint8)
+            img = Image.fromarray(data)
+            yield img
     finally:
       # TODO: Handle errors
       pass

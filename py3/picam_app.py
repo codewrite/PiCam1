@@ -28,6 +28,12 @@ def gen(camera):
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
+def motion_gen(camera):
+    while True:
+        frame = camera.get_frame()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
 @ns_camera.route('/properties')
 class CameraProperties(Resource):
   def get(self):
@@ -43,6 +49,12 @@ class VideoHelper(Resource):
     @ns_media.produces(['image/jpeg'])
     def get(self):
         return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@ns_media.route('/motion_feed/')
+class VideoHelper(Resource):
+    @ns_media.produces(['image/jpeg'])
+    def get(self):
+        return Response(motion_gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 # *******************************************************************
 # Test area - stuff to be deleted
