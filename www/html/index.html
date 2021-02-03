@@ -37,7 +37,7 @@
             <button type="button" :disabled="!showZoomControl" @click="zoomIn" class="btn btn-primary">Zoom In</button>
           </div>
           <div class="col-sm-3">
-            <button type="button" :disabled="!showZoomControl" @click="zoomOut" class="btn btn-primary">Zoom Out</button>
+            <button type="button" @click="zoomOut" class="btn btn-primary">Zoom Out</button>
           </div>
           <div class="col-sm-3">
             <button type="button" class="btn btn-danger" @click="clearLocalStorage">Clear Data</button>
@@ -59,6 +59,7 @@
       </div>
     </div>
     <script>
+      // Script for initial loading of Vue components
       function includeJS(uri) {
         var def = $.Deferred();
         var script = document.createElement('script');

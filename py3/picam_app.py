@@ -7,14 +7,17 @@ import time
 import json
 from utils import Utils
 
+# App definition
 app = Flask(__name__)
 CORS(app)
 api = Api(app, version='0.1', title='PiCam1 API', description='Raspberry Pi Camera 4 API')
 
+# Namespaces
 ns_camera = api.namespace('camera', description='Camera operations')
 ns_media = api.namespace('media', description='Media - videos and images')
 ns_obsolete = api.namespace('obsolete', description='Work in Progress - To be deleted')
 
+# Models (data)
 camera_fields = api.model('CameraProperties', {
   "annotate_text": fields.String,
   "awb_mode": fields.String,
@@ -22,12 +25,14 @@ camera_fields = api.model('CameraProperties', {
   "zoom": fields.List(fields.Integer, default=[0,0,1,1], description='x, y, w, h, 0 - 1')
 })
 
+# Helper methods
 def gen(camera):
     while True:
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
+# API methods
 @ns_camera.route('/properties')
 class CameraProperties(Resource):
   def get(self):
@@ -67,7 +72,10 @@ class AnnotateText(Resource):
     Camera().annotateText = args["text"]
 
 # *******************************************************************
+# End Test area
+# *******************************************************************
 
+# Main App
 if __name__ == '__main__':
     # certs copied from /etc/ssl/mycerts
     print('running...')

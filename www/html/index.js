@@ -10,7 +10,6 @@ var app = new Vue({
     },
     data: {
         videoFeedUrl: "http://" + window.location.hostname + ":5000/media/video_feed/",
-        //videoFeedUrl: "http://rpi4:5000/media/video_feed/",
         //videoFeedUrl: '/images/BackGarden.jpg',
         cameraPropertiesUrl: "http://" + window.location.hostname + ":5000/camera/properties",
         showZoomControl: false,
@@ -53,7 +52,7 @@ var app = new Vue({
         axios
           .put(this.cameraPropertiesUrl, zoomData)
           .then(response => {
-            
+            this.showZoomControl = false;
           })
           .catch(error => {
             console.log(error)
