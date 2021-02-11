@@ -1,4 +1,8 @@
-﻿.versionDiv {
-    text-align: center;
-    font-size: small;
+﻿.custom-control-override {
+  padding-left: 3.3rem;
+}
+
+.versionDiv {
+  text-align: center;
+  font-size: small;
 }

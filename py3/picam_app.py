@@ -43,6 +43,11 @@ class CameraProperties(Resource):
     for a in reqData:
       exec("Camera().camera." + a + "=reqData['" + a + "']")
 
+@ns_camera.route('/stillshot')
+class StillShot(Resource):
+  def put(self):
+    Camera().TakeStillShot()
+
 @ns_media.route('/video_feed/')
 class VideoHelper(Resource):
     @ns_media.produces(['image/jpeg'])
@@ -64,7 +69,7 @@ class AnnotateText(Resource):
   def get(self):
     text = Camera().annotateText
     return { 'text': text }
-  @api.doc(body=camera_fields)
+  @api.doc(body=fields.String)
   def put(self):
     parser = reqparse.RequestParser()
     parser.add_argument("text", default="", type=str)

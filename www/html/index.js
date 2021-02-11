@@ -12,9 +12,10 @@ var app = new Vue({
         videoFeedUrl: "http://" + window.location.hostname + ":5000/media/video_feed/",
         //videoFeedUrl: '/images/BackGarden.jpg',
         cameraPropertiesUrl: "http://" + window.location.hostname + ":5000/camera/properties",
+        takeStillShotUrl: "http://" + window.location.hostname + ":5000/camera/stillshot",
         showZoomControl: false,
-        videoWidth: 320,
-        videoHeight: 160,
+        videoWidth: 640,
+        videoHeight: 480,
         zoomPos: { top: 40, left: 50, width: 200, height: 150 }
     },
     mounted() {
@@ -70,9 +71,19 @@ var app = new Vue({
       zoomOut: function() {
         this.doZoom({ "zoom": [ 0,0,1,1 ] });
       },
+      takeStillShot: function() {
+        axios
+          .put(this.takeStillShotUrl)
+          .then(response => {
+          })
+          .catch(error => {
+            console.log(error)
+          })
+          .finally(() => {});
+      },
       onImgLoad: function(ev) {
-        this.videoWidth = ev.currentTarget.width;
-        this.videoHeight = ev.currentTarget.height;
+        this.videoWidth = Math.max(ev.currentTarget.width, 640);
+        this.videoHeight = Math.max(ev.currentTarget.height, 480);
       },
       zoomControlMousePosTest: function(data) {
         this.mouseX = data.x;

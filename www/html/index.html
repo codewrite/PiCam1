@@ -18,10 +18,10 @@
       // Update this every time the website is modified
       var indexPageVersion = "v0.001";
     </script>
-    <div id="app" class="container">
+    <div id="app" class="container-fluid">
         <h1>Raspberry Pi 4 Camera</h1>
         <div id="img-container" :style="{width: videoWidth + 'px', height: videoHeight + 'px', position: 'relative'}">
-          <img :src="videoFeedUrl" style="position: absolute;"  @load="onImgLoad"/>
+          <img :src="videoFeedUrl" style="position: absolute;min-width:640px"  @load="onImgLoad"/>
           <zoom-control @zoom-mouse-pos-test="zoomControlMousePosTest" @zoom-move="zoomControlMove"
                         :framewidth="videoWidth" :frameheight="videoHeight" :control-visible="showZoomControl"
                         :top="zoomPos.top" :left="zoomPos.left" :width="zoomPos.width" :height="zoomPos.height"></zoom-control>
@@ -29,7 +29,7 @@
       <div :style="{width: videoWidth + 'px'}">
         <hr/>
         <div class="row">
-          <div class="col-sm-3 custom-control custom-switch">
+          <div class="col-sm-3 custom-control custom-switch custom-control-override">
             <input type="checkbox" id="zoom-control-checkbox" v-model="showZoomControl" class="custom-control-input">
             <label class="custom-control-label" for="zoom-control-checkbox">Zoom Control</label>
           </div>
@@ -52,6 +52,14 @@
           </div>
           <div class="col-sm-4">
             Y: {{ mouseY }}
+          </div>
+        </div>
+        <hr/>
+        <div class="row">
+          <div class="col-sm-3">
+            <button type="button" @click="takeStillShot" class="btn btn-primary">Take Picture</button>
+          </div>
+          <div class="col-sm-9">
           </div>
         </div>
         <hr/>
