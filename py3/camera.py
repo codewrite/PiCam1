@@ -49,7 +49,7 @@ class Camera(BaseCamera):
     try:
       time.sleep(2)
       output = StreamingOutput()
-      cls._camera.start_recording(output, format='mjpeg', splitter_port=2, resize=(320,240))
+      cls._camera.start_recording(output, format='mjpeg', splitter_port=1, resize=(320,240))
       while True:
         with output.condition:
           output.condition.wait()
@@ -59,7 +59,7 @@ class Camera(BaseCamera):
           else:
             _ = output.frame
     finally:
-      cls._camera.stop_recording(splitter_port=2)
+      cls._camera.stop_recording(splitter_port=1)
       # TODO: Handle errors
 
   @classmethod
