@@ -1,9 +1,9 @@
 import io
+import os
 import time
 from threading import Condition
-import os
 import picamera
-from base_camera import BaseCamera
+from core.base_camera import BaseCamera
 
 class StreamingOutput(object):
     def __init__(self):
@@ -49,7 +49,7 @@ class Camera(BaseCamera):
     try:
       time.sleep(2)
       output = StreamingOutput()
-      cls._camera.start_recording(output, format='mjpeg', splitter_port=1, resize=(320,240))
+      cls._camera.start_recording(output, format='mjpeg', splitter_port=1, resize=(640,480))
       while True:
         with output.condition:
           output.condition.wait()
@@ -67,7 +67,7 @@ class Camera(BaseCamera):
     print("take picture")
     cwd = os.getcwd()
     print(cwd)
-    cls._camera.capture('foo.jpg') #, resize=(3280, 2464))
+    cls._camera.capture('images/captured/capture1.jpg') #, resize=(3280, 2464))
 
   @property
   def annotateText(self):
