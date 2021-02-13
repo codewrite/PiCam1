@@ -140,3 +140,4 @@ cython_debug/
 # ******************** PiCam1 Specific stuff ******************************
 
 py3/certs/
+py3/images/captured
