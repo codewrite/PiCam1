@@ -1,24 +1,26 @@
-import io
-import os
 import time
+from io import BytesIO
+from os import getcwd
+from datetime import datetime
 from threading import Condition
 import picamera
 from core.base_camera import BaseCamera
+from core.camera_image import CameraImage
 
 class StreamingOutput(object):
     def __init__(self):
         self.frame = None
-        self.buffer = io.BytesIO()
+        self.buffer = BytesIO()
         self.condition = Condition()
 
     def write(self, buf):
+        # See: https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format
         if buf.startswith(b'\xff\xd8'):
-            # New frame, copy the existing buffer's content and notify all
-            # clients it's available
-            self.buffer.truncate()
-            with self.condition:
-                self.frame = self.buffer.getvalue()
-                self.condition.notify_all()
+          # New frame, copy the existing buffer's content and notify all clients it's available
+          self.buffer.truncate()
+          with self.condition:
+            self.frame = self.buffer.getvalue()
+            self.condition.notify_all()
             self.buffer.seek(0)
         return self.buffer.write(buf)
 
@@ -65,9 +67,13 @@ class Camera(BaseCamera):
   @classmethod
   def TakeStillShot(cls):
     print("take picture")
-    cwd = os.getcwd()
+    cwd = getcwd()
     print(cwd)
-    cls._camera.capture('images/captured/capture1.jpg') #, resize=(3280, 2464))
+    filename = datetime.utcnow().strftime('capture-%y%m%d-%H%M%S.jpg')
+    infile = 'images/captured/' + filename
+    outfile = 'images/captured/thumbnails/' + filename
+    cls._camera.capture(infile)
+    CameraImage.resizeImage(infile, outfile, (128,96))
 
   @property
   def annotateText(self):

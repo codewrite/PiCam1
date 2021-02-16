@@ -42,7 +42,8 @@ var app = new Vue({
         if (globalConstants === undefined) { return "" }
         return globalConstants.indexPageVersion;
       },
-      lastModified: function() { return new Date(document.lastModified).toDateString()
+      lastModified: function() {
+        return new Date(document.lastModified).toDateString()
       },
       created: function () {
       },

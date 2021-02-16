@@ -8,9 +8,6 @@ api = Namespace('camera', description='Camera operations')
 
 # Models (data)
 camera_fields = api.model('CameraProperties', {
-  "annotate_text": fields.String,
-  "awb_mode": fields.String,
-  "rotation": fields.Integer,
   "zoom": fields.List(fields.Integer, default=[0,0,1,1], description='x, y, w, h, 0 - 1')
 })
 
