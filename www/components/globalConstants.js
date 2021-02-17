@@ -5,5 +5,6 @@
 const globalConstants =
 {
   lastModifiedTimestamp: undefined,
-  indexPageVersion: undefined
+  indexPageVersion: undefined,
+  framePage: undefined
 };
