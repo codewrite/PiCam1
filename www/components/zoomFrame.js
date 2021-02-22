@@ -28,7 +28,10 @@ Vue.component('zoom-frame', {
           <div class="col-sm-3">
             <button type="button" @click="takeStillShot" class="btn btn-primary">Take Picture</button>
           </div>
-          <div class="col-sm-9"></div>
+          <div class="col-sm-3">
+            <a href="/?page=images" class="btn btn-primary">View Images</a>
+          </div>
+          <div class="col-sm-6"></div>
         </div>
         <div class="row picam-control-row">
           <div class="col-sm-3 custom-control custom-switch custom-control-override">

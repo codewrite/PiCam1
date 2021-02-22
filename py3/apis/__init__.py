@@ -2,7 +2,6 @@ from flask_restplus import Api
 
 from .media import api as media
 from .camera import api as camera
-from .obsolete import api as obsolete
 
 api = Api(
     title='PiCam1 API',
@@ -13,5 +12,4 @@ api = Api(
 
 api.add_namespace(camera)
 api.add_namespace(media)
-api.add_namespace(obsolete)
 # ...

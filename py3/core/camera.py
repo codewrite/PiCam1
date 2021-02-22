@@ -5,7 +5,7 @@ from datetime import datetime
 from threading import Condition
 import picamera
 from core.base_camera import BaseCamera
-from core.camera_image import CameraImage
+from core.images import CameraImage
 
 class StreamingOutput(object):
     def __init__(self):

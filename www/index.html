@@ -36,7 +36,8 @@
       var framePageLoad = includeJS("components/framepage.js?v=" + lastModifiedTimestamp).always(function() {});
       var zoomFrameLoad = includeJS("components/zoomFrame.js?v=" + lastModifiedTimestamp).always(function() {});
       var zoomControlLoad = includeJS("components/zoomControl.js?v=" + lastModifiedTimestamp).always(function() {});
-      Promise.all([globalLoad, zoomFrameLoad, zoomControlLoad, framePageLoad]).then((values) => {
+      var imageFrameLoad = includeJS("components/imageFrame.js?v=" + lastModifiedTimestamp).always(function() {});
+      Promise.all([globalLoad, zoomFrameLoad, zoomControlLoad, framePageLoad, imageFrameLoad]).then((values) => {
         console.log(values);
         includeJS("index.js?v=" + lastModifiedTimestamp);
       });
