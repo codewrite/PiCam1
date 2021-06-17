@@ -20,7 +20,12 @@
       var indexPageVersion = "v0.001";
     </script>
     <div id="app" class="container-fluid">
-      <h1>Raspberry Pi 4 Camera</h1>
+      <div class="row" style="width: 640px;">
+        <div class="col-sm-11"><h1>Raspberry Pi 4 Camera</h1></div>        
+        <div class="col-sm-1">
+          <a href="/?page=settings"><img src="images/settings.png" style="width:32px;padding-top:20px;" /></a>
+        </div>
+      </div>      
       <frame-page></frame-page>
       <hr/>
       <div class="versionDiv">{{ pageVersion() }}: Last Update: {{ lastModified() }}</div>
@@ -37,7 +42,8 @@
       var zoomFrameLoad = includeJS("components/zoomFrame.js?v=" + lastModifiedTimestamp).always(function() {});
       var zoomControlLoad = includeJS("components/zoomControl.js?v=" + lastModifiedTimestamp).always(function() {});
       var imageFrameLoad = includeJS("components/imageFrame.js?v=" + lastModifiedTimestamp).always(function() {});
-      Promise.all([globalLoad, zoomFrameLoad, zoomControlLoad, framePageLoad, imageFrameLoad]).then((values) => {
+      var settingsFrameLoad = includeJS("components/settingsFrame.js?v=" + lastModifiedTimestamp).always(function() {});
+      Promise.all([globalLoad, zoomFrameLoad, zoomControlLoad, framePageLoad, imageFrameLoad, settingsFrameLoad]).then((values) => {
         console.log(values);
         includeJS("index.js?v=" + lastModifiedTimestamp);
       });

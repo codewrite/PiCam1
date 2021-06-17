@@ -6,5 +6,6 @@ const globalConstants =
 {
   lastModifiedTimestamp: undefined,
   indexPageVersion: undefined,
-  framePage: undefined
+  framePage: undefined,
+  cameraProperties: {}
 };
