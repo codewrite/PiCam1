@@ -16,5 +16,5 @@ if __name__ == '__main__':
     # certs copied from /etc/ssl/mycerts
     print('running...')
     # app.run(host='0.0.0.0', debug=True, ssl_context=('certs/nginx.pem', 'certs/nginx.key'))
-    app.run(host='0.0.0.0', debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=False)
     print('stopping...')

@@ -95,9 +95,12 @@ Vue.component('zoom-frame', {
           .finally(() => { });
       },
       zoomIn: function () {
-        var rotation = globalConstants.cameraProperties.rotation;
         var x = this.zoomPos.left / this.videoWidth;
         var y = this.zoomPos.top / this.videoHeight;
+        var rotation = globalConstants.cameraProperties.rotation;
+        if (rotation == 90 || rotation == 270) {
+          [x,y] = [y,x];
+        }
         var width = this.zoomPos.width / this.videoWidth;
         var height = this.zoomPos.height / this.videoHeight;
         var zoomData = { "zoom": [x, y, width, height] }

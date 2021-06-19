@@ -10,6 +10,6 @@ api = Api(
     # All API metadatas
 )
 
-api.add_namespace(camera)
 api.add_namespace(media)
+api.add_namespace(camera)
 # ...
