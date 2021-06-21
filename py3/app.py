@@ -13,8 +13,8 @@ api.init_app(app)
 # *******************************************************************
 
 if __name__ == '__main__':
-    # certs copied from /etc/ssl/mycerts
+    # certs copied from /etc/ssl/mycerts, using: sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/mycerts/nginx.key -out /etc/ssl/mycerts/nginx.pem
     print('running...')
-    # app.run(host='0.0.0.0', debug=True, ssl_context=('certs/nginx.pem', 'certs/nginx.key'))
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', debug=True, ssl_context=('certs/nginx.pem', 'certs/nginx.key'))
+    # app.run(host='0.0.0.0', port=5000, debug=False)
     print('stopping...')

@@ -5,10 +5,10 @@ Vue.component('zoom-frame', {
       let defaultTop = 40;
       let defaultLeft = 50;
       return {
-        videoFeedUrl: "http://" + window.location.hostname + ":5000/media/video_feed/",
+        videoFeedUrl: window.location.protocol + "//" + window.location.hostname + ":5000/media/video_feed/",
         //videoFeedUrl: '/images/BackGarden.jpg',
-        cameraPropertiesUrl: "http://" + window.location.hostname + ":5000/camera/properties",
-        takeStillShotUrl: "http://" + window.location.hostname + ":5000/camera/stillshot",
+        cameraPropertiesUrl: window.location.protocol + "//" + window.location.hostname + ":5000/camera/properties",
+        takeStillShotUrl: window.location.protocol + "//" + window.location.hostname + ":5000/camera/stillshot",
         showZoomControl: false,
         videoWidth: 640,
         videoHeight: 480,
@@ -100,6 +100,7 @@ Vue.component('zoom-frame', {
         var rotation = globalConstants.cameraProperties.rotation;
         if (rotation == 90 || rotation == 270) {
           [x,y] = [y,x];
+          [width, height] = [height, width]
         }
         var width = this.zoomPos.width / this.videoWidth;
         var height = this.zoomPos.height / this.videoHeight;

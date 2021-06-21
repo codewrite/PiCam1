@@ -7,7 +7,7 @@ Vue.component('frame-page', function (resolve, reject) {
       },
       data: function () {
         return {
-          cameraPropertiesUrl: "http://" + window.location.hostname + ":5000/camera/properties",
+          cameraPropertiesUrl: window.location.protocol + "//" + window.location.hostname + ":5000/camera/properties",
           ViewTitle: "Live stream"
         }
       },

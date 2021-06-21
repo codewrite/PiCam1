@@ -3,12 +3,13 @@ Vue.component('image-frame', {
     },
     data: function () {
       return {
-        videoFeedUrl: "http://" + window.location.hostname + ":5000/media/video_feed/",
+        windowProtocol: window.location.protocol,
+        videoFeedUrl: window.location.protocol + "//" + window.location.hostname + ":5000/media/video_feed/",
         //videoFeedUrl: '/images/BackGarden.jpg',
         hostUrl: window.location.hostname,
-        cameraPropertiesUrl: "http://" + window.location.hostname + ":5000/camera/properties",
-        takeStillShotUrl: "http://" + window.location.hostname + ":5000/camera/stillshot",
-        imagesUrl: "http://" + window.location.hostname + ":5000/media/images",
+        cameraPropertiesUrl: window.location.protocol + "//" + window.location.hostname + ":5000/camera/properties",
+        takeStillShotUrl: window.location.protocol + "//" + window.location.hostname + ":5000/camera/stillshot",
+        imagesUrl: window.location.protocol + "//" + window.location.hostname + ":5000/media/images",
         imageList: [],
         currentImage: undefined
       }
@@ -16,10 +17,10 @@ Vue.component('image-frame', {
     template: /*html*/`
     <div>
       <div>    
-        <img v-for="item in imageList" :src="'http://' + hostUrl + ':5000/media/thumbnail/' + item" @click="selectImage(item)" style="padding:5px 5px 0 0"/>
+        <img v-for="item in imageList" :src="windowProtocol + '//' + hostUrl + ':5000/media/thumbnail/' + item" @click="selectImage(item)" style="padding:5px 5px 0 0"/>
       </div>
       <div>    
-        <img :src="'http://' + hostUrl + ':5000/media/image/' + currentImage" style="padding-top:5px"/>
+        <img v-if="currentImage" :src="windowProtocol + '//' + hostUrl + ':5000/media/image/' + currentImage" style="padding-top:5px"/>
       </div>
     </div>
     `,
