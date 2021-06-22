@@ -3,9 +3,10 @@ from flask import request
 from flask_restplus import Namespace, Resource, fields
 from core.camera import Camera
 from core.utils import Utils
-from .authorization import authorizations
+from .authorization import auth, authorizations
 
 api = Namespace('camera', description='Camera operations', security='Basic Auth', authorizations=authorizations)
+api.decorators = [auth.login_required]
 
 # Models (data)
 camera_fields = api.model('CameraProperties', {

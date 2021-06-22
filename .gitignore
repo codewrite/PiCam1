@@ -141,3 +141,4 @@ cython_debug/
 
 py3/certs/
 py3/images/captured
+passwords.py
