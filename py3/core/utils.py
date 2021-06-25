@@ -2,7 +2,7 @@ import json
 
 class Utils:
   @staticmethod
-  def convertToDictinary(obj):
+  def convertToDictionary(obj):
     allAttr = [a for a in dir(obj) if not a.startswith('_')]
     propNames = []
     for a in allAttr:
