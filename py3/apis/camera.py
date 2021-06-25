@@ -16,7 +16,7 @@ camera_fields = api.model('CameraProperties', {
 @api.route('/properties')
 class CameraProperties(Resource):
   def get(self):
-    return Utils.convertToDictinary(Camera().camera)
+    return Utils.convertToDictionary(Camera().camera)
   @api.doc(body=camera_fields)
   def put(self):
     reqData = json.loads(request.data)
