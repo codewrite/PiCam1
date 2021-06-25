@@ -81,7 +81,8 @@ Vue.component('zoom-frame', {
       created: function () {
       },
       clearLocalStorage: function () {
-        localStorage.clear();
+        //localStorage.clear();
+        console.log(app.lastModified());
       },
       doZoom: function (zoomData) {
         axios
@@ -97,7 +98,7 @@ Vue.component('zoom-frame', {
       zoomIn: function () {
         var x = this.zoomPos.left / this.videoWidth;
         var y = this.zoomPos.top / this.videoHeight;
-        var rotation = globalConstants.cameraProperties.rotation;
+        var rotation = app.cameraProperties.rotation;
         if (rotation == 90 || rotation == 270) {
           [x,y] = [y,x];
           [width, height] = [height, width]

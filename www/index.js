@@ -7,22 +7,42 @@ var app = new Vue({
     props: {
     },
     data: {
+      cameraPropertiesUrl: window.location.protocol + "//" + window.location.hostname + ":5000/camera/properties",
+      cameraProperties: {}
+    },
+    mounted() {
+      if (sessionStorage.cameraProperties) {
+        this.cameraProperties = JSON.parse(sessionStorage.cameraProperties);
+      }
+      else {
+        this.getCameraProperties()
+      }
     },
     methods: {
       pageVersion: function() {
-        if (globalConstants === undefined) { return "" }
-          return globalConstants.indexPageVersion;
+          return initGlobals.indexPageVersion;
       },
       lastModified: function() {
         return new Date(document.lastModified).toDateString()
-      }
+      },
+      getCameraProperties: function () {
+        axios
+          .get(this.cameraPropertiesUrl)
+          .then(response => {
+            app.cameraProperties = response.data;
+          })
+          .catch(error => {
+            console.log(error)
+          })
+          .finally(() => { });
+      },
     },
     created: function() {
       var absLocation = window.location.href;
-      globalConstants.framePage = 	absLocation.replace(/^.*page=(\w+).*$/, '$1');
+      initGlobals.framePage = 	absLocation.replace(/^.*page=(\w+).*$/, '$1');
   
-      if (globalConstants.framePage === absLocation || globalConstants.framePage === 'home') {
-        globalConstants.framePage = 'video';
+      if (initGlobals.framePage === absLocation || initGlobals.framePage === 'home') {
+        initGlobals.framePage = 'video';
       }
     },
     computed: {
