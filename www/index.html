@@ -34,12 +34,13 @@
       initGlobals.lastModifiedTimestamp = new Date(document.lastModified).toISOString()
                                         .replace(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}).*/g,'$142$3$4$5');
       $.ajaxSetup({cache: true});
+      var cameraApiLoad = includeJS("mixins/cameraApi.js?v=" + initGlobals.lastModifiedTimestamp).always(function() {});
       var framePageLoad = includeJS("components/framepage.js?v=" + initGlobals.lastModifiedTimestamp).always(function() {});
       var zoomFrameLoad = includeJS("components/zoomFrame.js?v=" + initGlobals.lastModifiedTimestamp).always(function() {});
       var zoomControlLoad = includeJS("components/zoomControl.js?v=" + initGlobals.lastModifiedTimestamp).always(function() {});
       var imageFrameLoad = includeJS("components/imageFrame.js?v=" + initGlobals.lastModifiedTimestamp).always(function() {});
       var settingsFrameLoad = includeJS("components/settingsFrame.js?v=" + initGlobals.lastModifiedTimestamp).always(function() {});
-      Promise.all([zoomFrameLoad, zoomControlLoad, framePageLoad, imageFrameLoad, settingsFrameLoad]).then((values) => {
+      Promise.all([cameraApiLoad, framePageLoad, zoomFrameLoad, zoomControlLoad, imageFrameLoad, settingsFrameLoad, cameraApiLoad]).then((values) => {
         console.log(values);
         includeJS("index.js?v=" + initGlobals.lastModifiedTimestamp);
       });

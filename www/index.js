@@ -4,11 +4,11 @@
 
 var app = new Vue({
     el: '#app',
+    mixins: [CameraApi],
     props: {
     },
     data: {
-      cameraPropertiesUrl: window.location.protocol + "//" + window.location.hostname + ":5000/camera/properties",
-      cameraProperties: {}
+      cameraProperties: {},
     },
     mounted() {
       if (sessionStorage.cameraProperties) {
@@ -26,15 +26,7 @@ var app = new Vue({
         return new Date(document.lastModified).toDateString()
       },
       getCameraProperties: function () {
-        axios
-          .get(this.cameraPropertiesUrl)
-          .then(response => {
-            app.cameraProperties = response.data;
-          })
-          .catch(error => {
-            console.log(error)
-          })
-          .finally(() => { });
+        this.$callApiGet("camera/properties", (response) => { app.cameraProperties = response.data; })
       },
     },
     created: function() {

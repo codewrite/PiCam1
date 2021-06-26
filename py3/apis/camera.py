@@ -3,10 +3,8 @@ from flask import request
 from flask_restplus import Namespace, Resource, fields
 from core.camera import Camera
 from core.utils import Utils
-from .authorization import auth, authorizations
 
-api = Namespace('camera', description='Camera operations', security='Basic Auth', authorizations=authorizations)
-api.decorators = [auth.login_required]
+api = Namespace('camera', description='Camera operations')
 
 # Models (data)
 camera_fields = api.model('CameraProperties', {
@@ -14,7 +12,6 @@ camera_fields = api.model('CameraProperties', {
 })
 
 @api.route('/properties')
-@api.doc(security='Basic Auth')
 class CameraProperties(Resource):
   def get(self):
     return Utils.convertToDictionary(Camera().camera)
@@ -25,7 +22,6 @@ class CameraProperties(Resource):
       exec("Camera().camera." + a + "=reqData['" + a + "']")
 
 @api.route('/stillshot')
-@api.doc(security='Basic Auth')
 class StillShot(Resource):
   def put(self):
     Camera().TakeStillShot()

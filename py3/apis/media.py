@@ -4,10 +4,8 @@ from flask import Response, make_response, send_file
 from flask_restplus import Namespace, Resource
 from core.camera import Camera
 from core.images import CameraImage
-from .authorization import auth, authorizations
 
-api = Namespace('media', description='Media - videos and images', security='Basic Auth', authorizations=authorizations)
-api.decorators = [auth.login_required]
+api = Namespace('media', description='Media - videos and images')
 
 # Helper methods
 
@@ -19,14 +17,12 @@ def gen(camera):
 # API methods
 
 @api.route('/video_feed/')
-@api.doc(security='Basic Auth')
 class VideoHelper(Resource):
     @api.produces(['image/jpeg'])
     def get(self):
       return Response(gen(Camera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @api.route('/video_first_frame/')
-@api.doc(security='Basic Auth')
 class VideoStillHelper(Resource):
     @api.produces(['image/jpeg'])
     def get(self):
@@ -36,19 +32,16 @@ class VideoStillHelper(Resource):
       return response
 
 @api.route('/images')
-@api.doc(security='Basic Auth')
 class ImagesHelper(Resource):
   def get(self):
     return CameraImage.listImages()
 
 @api.route('/image/<string:filename>')
-@api.doc(security='Basic Auth')
 class SingleImageHelper(Resource):
   def get(self, filename):
     return make_response(send_file(CameraImage.getImage(filename), mimetype='image/jpg'))
 
 @api.route('/thumbnail/<string:filename>')
-@api.doc(security='Basic Auth')
 class ThumbnailHelper(Resource):
   def get(self, filename):
     return make_response(send_file(CameraImage.getThumbnail(filename), mimetype='image/jpg'))

@@ -1,14 +1,11 @@
 Vue.component('zoom-frame', {
+    mixins: [CameraApi],
     props: {
     },
     data: function () {
       let defaultTop = 40;
       let defaultLeft = 50;
       return {
-        videoFeedUrl: window.location.protocol + "//" + window.location.hostname + ":5000/media/video_feed/",
-        //videoFeedUrl: '/images/BackGarden.jpg',
-        cameraPropertiesUrl: window.location.protocol + "//" + window.location.hostname + ":5000/camera/properties",
-        takeStillShotUrl: window.location.protocol + "//" + window.location.hostname + ":5000/camera/stillshot",
         showZoomControl: false,
         videoWidth: 640,
         videoHeight: 480,
@@ -20,7 +17,7 @@ Vue.component('zoom-frame', {
     template: /*html*/`
     <div>
       <div id="img-container" :style="{width: videoWidth + 'px', height: videoHeight + 'px', position: 'relative'}">
-        <img :src="videoFeedUrl" style="position: absolute;min-width:640px"  @load="onImgLoad"/>
+        <img :src="$apiAbsolutePath('media/video_feed')" style="position: absolute;min-width:640px"  @load="onImgLoad"/>
         <zoom-control @zoom-mouse-pos-test="zoomControlMousePosTest" @zoom-move="zoomControlMove"
                       :framewidth="videoWidth" :frameheight="videoHeight" :control-visible="showZoomControl"
                       :top="zoomPos.top" :left="zoomPos.left" :width="zoomPos.width" :height="zoomPos.height"></zoom-control>
@@ -85,15 +82,7 @@ Vue.component('zoom-frame', {
         console.log(app.lastModified());
       },
       doZoom: function (zoomData) {
-        axios
-          .put(this.cameraPropertiesUrl, zoomData)
-          .then(response => {
-            this.showZoomControl = false;
-          })
-          .catch(error => {
-            console.log(error)
-          })
-          .finally(() => { });
+        this.$callApiPut("camera/properties", zoomData, (response) => { this.showZoomControl = false; });
       },
       zoomIn: function () {
         var x = this.zoomPos.left / this.videoWidth;
@@ -112,14 +101,7 @@ Vue.component('zoom-frame', {
         this.doZoom({ "zoom": [0, 0, 1, 1] });
       },
       takeStillShot: function () {
-        axios
-          .put(this.takeStillShotUrl)
-          .then(response => {
-          })
-          .catch(error => {
-            console.log(error)
-          })
-          .finally(() => { });
+        this.$callApiPut("camera/stillshot", null, (response) => { });
       },
       onImgLoad: function (ev) {
         this.videoWidth = Math.max(ev.currentTarget.width, 640);

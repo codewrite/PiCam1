@@ -7,7 +7,6 @@ Vue.component('frame-page', function (resolve, reject) {
       },
       data: function () {
         return {
-          ViewTitle: "Live stream"
         }
       },
       mounted() {
