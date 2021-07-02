@@ -1,5 +1,4 @@
-from flask_restplus import Namespace, Resource, fields, reqparse
-from core.camera import Camera
+from flask_restplus import Namespace, Resource
 from .authorization import auth
 
 # Namespaces
@@ -12,21 +11,6 @@ class HelloWorld(Resource):
   @auth.login_required
   def get(self):
     return {'hello': 'world'}
-
-@api.route('/annotateText')
-# @api.route('/annotateText/<string:text>')
-class AnnotateText(Resource):
-  @auth.login_required
-  def get(self):
-    text = Camera().annotateText
-    return { 'text': text }
-  @auth.login_required
-  @api.doc(body=fields.String)
-  def put(self):
-    parser = reqparse.RequestParser()
-    parser.add_argument("text", default="", type=str)
-    args = parser.parse_args()
-    Camera().annotateText = args["text"]
 
 api.state = 'test'
 

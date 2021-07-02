@@ -1,5 +1,6 @@
 Vue.component('settings-frame', {
-    props: {
+  mixins: [CameraApi],
+  props: {
     },
     data: function () {
       return {
@@ -29,12 +30,6 @@ Vue.component('settings-frame', {
         <div class="col-sm-1">
           <button type="button" class="btn btn-primary">Right</button>
         </div>
-      </div>
-      <div class="row picam-control-row">
-        <div class="col-sm-3">
-          <a href="/?page=video" class="btn btn-primary">Show Video</a>
-        </div>
-        <div class="col-sm-9"></div>
       </div>
     </div>
     `,
