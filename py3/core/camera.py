@@ -4,14 +4,16 @@ from datetime import datetime
 import picamera
 from core.base_camera import BaseCamera
 from core.images import CameraImage
+from core.settings import Settings
 from core.streaming_output import StreamingOutput
 
 class Camera(BaseCamera):
 
   _camera = None
   _frameCount = 0
-  _frameText = 'back garden'
-  _rotation = 180
+  _settings = Settings()
+  _frameText = _settings.frameText
+  _rotation = _settings.rotation
 
   @property
   def camera(self):
@@ -19,13 +21,15 @@ class Camera(BaseCamera):
 
   @property
   def frameText(self):
-    return Camera._frameText
+    return Camera._settings.frameText
 
   @frameText.setter
   def frameText(self, value):
-    Camera._frameText = value
+    Camera._settings.frameText = value
+    Camera._settings.serialize()
 
   def __init__(self, startThread=False):
+    print("camera __init__")
     Camera._frameCount = 0
     if Camera._camera is None:
       camera = picamera.PiCamera()
@@ -38,9 +42,13 @@ class Camera(BaseCamera):
       else:
         raise Exception("Camera revision not recognised: " + revision)
       camera.framerate = 24
-      camera.rotation = Camera._rotation
-    Camera._camera.annotate_text = Camera._frameText
+      camera.rotation = Camera._settings.rotation
+    Camera._camera.annotate_text = Camera._settings.frameText
     super().__init__(startThread)
+    print("camera __init__ exiting")
+
+  def __del__(self):
+    print("camera __del__")
 
   @classmethod
   def frames(cls):
