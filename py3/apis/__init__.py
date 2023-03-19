@@ -18,6 +18,6 @@ def LoginReq(dapi):
     return dapi
 
 api.add_namespace(LoginReq(camera))
-api.add_namespace(LoginReq(media))
+api.add_namespace(media)
 api.add_namespace(test)
 # ...

@@ -42,8 +42,8 @@ class Camera(BaseCamera):
       else:
         raise Exception("Camera revision not recognised: " + revision)
       camera.framerate = 24
-      camera.annotate_text = 'back garden'
-      camera.rotation = 180
+      camera.annotate_text = 'front garden'
+      camera.rotation = 90
     super().__init__()
 
   @classmethod
