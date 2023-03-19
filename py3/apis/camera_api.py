@@ -1,6 +1,6 @@
 import json
 from flask import request
-from flask_restplus import Namespace, Resource, fields
+from flask_restx import Namespace, Resource, fields
 from core.camera import Camera
 from core.utils import Utils
 

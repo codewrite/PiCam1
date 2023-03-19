@@ -1,4 +1,4 @@
-from flask_restplus import Api
+from flask_restx import Api
 from .authorization import auth, authorizations
 from .camera_api import api as cameraApi
 from .media_api import api as mediaApi
@@ -19,7 +19,8 @@ def LoginReq(dapi):
     return dapi
 
 api.add_namespace(LoginReq(cameraApi))
-api.add_namespace(LoginReq(mediaApi))
+#api.add_namespace(LoginReq(mediaApi))
+api.add_namespace(mediaApi)
 api.add_namespace(LoginReq(settingsApi))
 api.add_namespace(testApi)
 # ...
