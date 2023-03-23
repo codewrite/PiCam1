@@ -1,8 +1,9 @@
-from flask_restplus import Api
+from flask_restx import Api
 from .authorization import auth, authorizations
-from .camera import api as camera
-from .media import api as media
-from .obsolete import api as test
+from .camera_api import api as cameraApi
+from .media_api import api as mediaApi
+from .settings_api import api as settingsApi
+from .obsolete_api import api as testApi
 
 api = Api(
     title='PiCam1 API',
@@ -17,7 +18,9 @@ def LoginReq(dapi):
     dapi.decorators = [auth.login_required]
     return dapi
 
-api.add_namespace(LoginReq(camera))
-api.add_namespace(media)
-api.add_namespace(test)
+api.add_namespace(LoginReq(cameraApi))
+#api.add_namespace(LoginReq(mediaApi))
+api.add_namespace(mediaApi)
+api.add_namespace(LoginReq(settingsApi))
+api.add_namespace(testApi)
 # ...

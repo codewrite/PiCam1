@@ -1,35 +1,35 @@
 import time
-from io import BytesIO
 from os import getcwd
 from datetime import datetime
-from threading import Condition
 import picamera
 from core.base_camera import BaseCamera
 from core.images import CameraImage
-
-class StreamingOutput(object):
-    def __init__(self):
-        self.frame = None
-        self.buffer = BytesIO()
-        self.condition = Condition()
-
-    def write(self, buf):
-        # See: https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format
-        if buf.startswith(b'\xff\xd8'):
-          # New frame, copy the existing buffer's content and notify all clients it's available
-          self.buffer.truncate()
-          with self.condition:
-            self.frame = self.buffer.getvalue()
-            self.condition.notify_all()
-            self.buffer.seek(0)
-        return self.buffer.write(buf)
+from core.settings import Settings
+from core.streaming_output import StreamingOutput
 
 class Camera(BaseCamera):
 
   _camera = None
   _frameCount = 0
+  _settings = Settings()
+  _frameText = _settings.frameText
+  _rotation = _settings.rotation
 
-  def __init__(self):
+  @property
+  def camera(self):
+    return Camera._camera
+
+  @property
+  def frameText(self):
+    return Camera._settings.frameText
+
+  @frameText.setter
+  def frameText(self, value):
+    Camera._settings.frameText = value
+    Camera._settings.serialize()
+
+  def __init__(self, startThread=False):
+    print("camera __init__")
     Camera._frameCount = 0
     if Camera._camera is None:
       camera = picamera.PiCamera()
@@ -42,9 +42,13 @@ class Camera(BaseCamera):
       else:
         raise Exception("Camera revision not recognised: " + revision)
       camera.framerate = 24
-      camera.annotate_text = 'front garden'
-      camera.rotation = 90
-    super().__init__()
+      camera.rotation = Camera._settings.rotation
+    Camera._camera.annotate_text = Camera._settings.frameText
+    super().__init__(startThread)
+    print("camera __init__ exiting")
+
+  def __del__(self):
+    print("camera __del__")
 
   @classmethod
   def frames(cls):
@@ -74,15 +78,3 @@ class Camera(BaseCamera):
     outfile = 'images/captured/thumbnails/' + filename
     cls._camera.capture(infile)
     CameraImage.resizeImage(infile, outfile, (128,96))
-
-  @property
-  def annotateText(self):
-    return Camera._camera.annotate_text
-
-  @property
-  def camera(self):
-    return Camera._camera
-
-  @annotateText.setter
-  def annotateText(self, value):
-    Camera._camera.annotate_text = value
