@@ -1,4 +1,4 @@
-from flask_restplus import Api
+from flask_restx import Api
 from .authorization import auth, authorizations
 from .camera_api import api as cameraApi
 from .media_api import api as mediaApi

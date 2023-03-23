@@ -1,4 +1,4 @@
-from flask_restplus import Namespace, Resource, fields, reqparse
+from flask_restx import Namespace, Resource, fields, reqparse
 from core.camera import Camera
 
 # Namespaces

@@ -1,7 +1,7 @@
 from io import BytesIO
 from datetime import datetime
 from flask import Response, make_response, send_file
-from flask_restplus import Namespace, Resource
+from flask_restx import Namespace, Resource
 from core.camera import Camera
 from core.images import CameraImage
 
