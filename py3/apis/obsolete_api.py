@@ -1,4 +1,4 @@
-from flask_restx import Namespace, Resource, fields, reqparse
+from flask_restx import Namespace, Resource
 from .authorization import auth
 
 # Namespaces
