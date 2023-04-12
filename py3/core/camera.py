@@ -1,7 +1,9 @@
 import time
+import picamera
+# import cv2
+# import numpy as np
 from os import getcwd
 from datetime import datetime
-import picamera
 from core.base_camera import BaseCamera
 from core.images import CameraImage
 from core.settings import Settings
@@ -51,6 +53,12 @@ class Camera(BaseCamera):
     print("camera __del__")
 
   @classmethod
+  def addTimeStamp(cls, img):
+    cv2.putText(img=img, text=datetime.now().strftime("%Y-%m-%d %H:%M:%S"), org=(440,465),
+                fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=1,
+                color=(255, 255, 255), thickness=2)
+
+  @classmethod
   def frames(cls):
     try:
       time.sleep(2)
@@ -61,6 +69,26 @@ class Camera(BaseCamera):
           output.condition.wait()
           Camera._frameCount += 1
           if Camera._frameCount % 8 == 0:    # 8 / 24 = 3 frames per second
+            ## newFrame = cv2.imread(output.frame)
+            ## cls.addTimeStamp(newFrame)
+
+            # cv2.CV_LOAD_IMAGE_COLOR = 1
+            # npframe = np.fromstring(output.frame, dtype=np.uint8)
+            # pil_frame = cv2.imdecode(npframe,cv2.CV_LOAD_IMAGE_COLOR)
+            # cv2_im_rgb = cv2.cvtColor(pil_frame, cv2.COLOR_BGR2RGB)
+            # pil_im = Image.fromarray(cv2_im_rgb)
+            # buf= StringIO.StringIO()
+            # pil_im.save(buf, format= 'JPEG')
+            # new_frame = buf.getvalue()
+            # yield new_frame
+
+            # blank_image = np.zeros((480,640,3), np.uint8)
+            # pil_im = Image.fromarray(blank_image)
+            # buf= StringIO.StringIO()
+            # pil_im.save(buf, format= 'JPEG')
+            # new_frame = buf.getvalue()
+            # yield new_frame
+
             yield output.frame
           else:
             _ = output.frame

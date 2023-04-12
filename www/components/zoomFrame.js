@@ -30,7 +30,10 @@ Vue.component('zoom-frame', {
           <div class="col-sm-3">
             <a href="/?page=images" class="btn btn-primary">View Images</a>
           </div>
-          <div class="col-sm-6"></div>
+          <div class="col-sm-3">
+            <a href="/?page=opencv" class="btn btn-primary">OpenCV Test</a>
+          </div>
+          <div class="col-sm-3"></div>
         </div>
         <div class="row picam-control-row">
           <div class="col-sm-3 custom-control custom-switch custom-control-override">

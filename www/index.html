@@ -40,7 +40,9 @@
       var zoomControlLoad = includeJS("components/zoomControl.js?v=" + initGlobals.lastModifiedTimestamp).always(function() {});
       var imageFrameLoad = includeJS("components/imageFrame.js?v=" + initGlobals.lastModifiedTimestamp).always(function() {});
       var settingsFrameLoad = includeJS("components/settingsFrame.js?v=" + initGlobals.lastModifiedTimestamp).always(function() {});
-      Promise.all([cameraApiLoad, framePageLoad, zoomFrameLoad, zoomControlLoad, imageFrameLoad, settingsFrameLoad, cameraApiLoad]).then((values) => {
+      var opencvFrameLoad = includeJS("components/opencvFrame.js?v=" + initGlobals.lastModifiedTimestamp).always(function() {});
+      Promise.all([cameraApiLoad, framePageLoad, zoomFrameLoad, zoomControlLoad,
+                   imageFrameLoad, settingsFrameLoad, opencvFrameLoad, cameraApiLoad]).then((values) => {
         console.log(values);
         includeJS("index.js?v=" + initGlobals.lastModifiedTimestamp);
       });
