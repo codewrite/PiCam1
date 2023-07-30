@@ -68,7 +68,7 @@ class Camera(BaseCamera):
         with output.condition:
           output.condition.wait()
           Camera._frameCount += 1
-          if Camera._frameCount % 8 == 0:    # 8 / 24 = 3 frames per second
+          if Camera._frameCount % 4 == 0:    # 8 / 24 = 3 frames per second
             ## newFrame = cv2.imread(output.frame)
             ## cls.addTimeStamp(newFrame)
 

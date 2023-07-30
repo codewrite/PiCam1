@@ -5,7 +5,7 @@ from json import JSONEncoder
 class Settings:
   
   dataLoaded = False
-  frameText = 'back garden'
+  frameText = 'rpi3p'
   rotation = 180
 
   def __init__(self):
